@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class MEvsVE {
 	static Map<String, Integer> tempForTest = new HashMap<String, Integer>();
 	static Map<String, Integer> tempParent = new HashMap<String, Integer>();
 	static ArrayList<String> testCasesReciprocol = new ArrayList<String>();
+	static PrintWriter output;
 	static HashMap<String, Integer> south = new HashMap<String, Integer>() { // Start
 		/**
 		 * 
@@ -57,7 +61,6 @@ public class MEvsVE {
 		for (int r = 0; r < testCases.size(); r++) {
 			testCasesReciprocol.add(testCases.get(testCases.size() - (r + 1)));
 		}
-		System.out.println(testCases + "\n" + testCasesReciprocol);
 	}
 
 	public static void buildTestCases(int total) {
@@ -76,7 +79,6 @@ public class MEvsVE {
 		String[] temp = testCase.split("");
 		tempForTest.put(temp[0], Integer.parseInt(temp[1]));
 		tempForTest.put(temp[2], Integer.parseInt(temp[3]));
-		// checkNext();
 	}
 
 	public static void startTree(int total) {
@@ -89,12 +91,29 @@ public class MEvsVE {
 		String[] temp = parent.split("");
 		tempParent.put(temp[0], Integer.parseInt(temp[1]));
 		tempParent.put(temp[2], Integer.parseInt(temp[3]));
-
 	}
 
-	public static void main(String[] args) {
+	public static void openFile() throws IOException {
+		output = new PrintWriter(new FileWriter("./output.txt"));
+	}
+
+	public static void closeFile() {
+		output.close();
+	}
+
+	public static void outputToFile(String message) {
+		output.println(message);
+	}
+
+	public static void outputToConsole(String message) {
+		System.out.println(message);
+	}
+
+	public static void main(String[] args) throws IOException {
+		openFile();
 		int input = Integer.parseInt(JOptionPane.showInputDialog(null, "How many of each to make?\nVegetarians\\MeatEaters\n(They will be even)", 3));
 		buildTestCases(input);
 		startTree(input);
+		closeFile();
 	}
 }
