@@ -1,3 +1,9 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JOptionPane;
+
 // Java Program by Robert Stepp 05/30/2018
 /**
  * 
@@ -18,46 +24,77 @@
  *
  * 
  */
-class builder {
-
-	private String name;
-	private String type;
-	private String location;
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getLocation() {
-		return this.location;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public builder(String name, String type) {
-		this.name = name;
-		this.type = type;
-		this.location = "south";
-	}
-}
 
 public class MEvsVE {
-	static String[] names = { "Robert", "George", "Jane", "Angelus", "Buffy", "Lestat" }; // List of names to use
-	static String[] types = { "Meat Eater", "Vegetarian" }; // Types of people
+	static ArrayList<String> testCases = new ArrayList<String>();
+	static Map<String, Integer> tempForTest = new HashMap<String, Integer>();
+	static Map<String, Integer> tempParent = new HashMap<String, Integer>();
+	static ArrayList<String> testCasesReciprocol = new ArrayList<String>();
+	static HashMap<String, Integer> south = new HashMap<String, Integer>() { // Start
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
-	public static void main(String[] args) {
-		builder me1 = new builder(names[0], types[0]);
-		builder me2 = new builder(names[1], types[0]);
-		builder me3 = new builder(names[2], types[0]);
-		builder v1 = new builder(names[3], types[1]);
-		builder v2 = new builder(names[4], types[1]);
-		builder v3 = new builder(names[5], types[1]);
+		{
+			put("Meat Eaters", 3);
+			put("Vegetarians", 3);
+		}
+	};
+	static HashMap<String, Integer> north = new HashMap<String, Integer>() { // End
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			put("Meat Eaters", 0);
+			put("Vegetarians", 0);
+		}
+	};
+
+	public static void fillReciprocol() {
+		for (int r = 0; r < testCases.size(); r++) {
+			testCasesReciprocol.add(testCases.get(testCases.size() - (r + 1)));
+		}
+		System.out.println(testCases + "\n" + testCasesReciprocol);
 	}
 
+	public static void buildTestCases(int total) {
+		for (int i = 0; i <= total; i++) {
+			for (int j = total; j >= 0; j--) {
+				testCases.add("M" + i + "V" + j);
+			}
+		}
+		for (int l = 0; l < testCases.size(); l++) { // This is what will parse the test case to test against the next values.
+			parseTestCases(testCases.get(l));
+		}
+		fillReciprocol();
+	}
+
+	public static void parseTestCases(String testCase) {
+		String[] temp = testCase.split("");
+		tempForTest.put(temp[0], Integer.parseInt(temp[1]));
+		tempForTest.put(temp[2], Integer.parseInt(temp[3]));
+		// checkNext();
+	}
+
+	public static void startTree(int total) {
+		TreeNode<String> root = new TreeNode<String>();
+		root.data = "M" + total + "V" + total;
+		findNext(root.data);
+	}
+
+	public static void findNext(String parent) {
+		String[] temp = parent.split("");
+		tempParent.put(temp[0], Integer.parseInt(temp[1]));
+		tempParent.put(temp[2], Integer.parseInt(temp[3]));
+
+	}
+
+	public static void main(String[] args) {
+		int input = Integer.parseInt(JOptionPane.showInputDialog(null, "How many of each to make?\nVegetarians\\MeatEaters\n(They will be even)", 3));
+		buildTestCases(input);
+		startTree(input);
+	}
 }
