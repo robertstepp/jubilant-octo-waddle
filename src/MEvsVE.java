@@ -13,12 +13,12 @@ import javax.swing.JOptionPane;
  * 
  * @author Robert Stepp
  * @title Lab 10 Comprehensive
- * @description Write a program to solve the “Vegetarians and Meat Eaters”
+ * @description Write a program to solve the â€œVegetarians and Meat Eatersâ€�
  *              problem. Three vegetarians and three hungry meat-eaters need to
  *              cross a river. Unfortunately, the boat only holds two people. If
  *              the meat-eaters outnumber the vegetarians on either bank, the
  *              vegetarians will be eaten! Please note: nobody gets to stay on
- *              the boat. When there’s three meat-eaters on one side, it doesn’t
+ *              the boat. When thereâ€™s three meat-eaters on one side, it doesnâ€™t
  *              matter if one just came over on the boat or not. Your challenge
  *              is to find a series of moves that gets all three vegetarians and
  *              all three meat-eaters across the river safely. Write a program
@@ -31,13 +31,40 @@ import javax.swing.JOptionPane;
 
 public class MEvsVE {
 	static ArrayList<String> testCases = new ArrayList<String>();
+	static ArrayList<String> invalidCases = new ArrayList<String>();
 	static Map<String, Integer> tempForTest = new HashMap<String, Integer>();
 	static Map<String, Integer> tempParent = new HashMap<String, Integer>();
 	static Map<String, Integer> tempPreviousParent = new HashMap<String, Integer>();
 	static ArrayList<String> testCasesReciprocol = new ArrayList<String>();
 	static PrintWriter output;
+<<<<<<< HEAD
 	static char direction = 'n';
 	static TreeNode<String> root = new TreeNode<String>();
+=======
+	static int max = 0;
+	static HashMap<String, Integer> south = new HashMap<String, Integer>() { // Start
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			put("Meat Eaters", 3);
+			put("Vegetarians", 3);
+		}
+	};
+	static HashMap<String, Integer> north = new HashMap<String, Integer>() { // End
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			put("Meat Eaters", 0);
+			put("Vegetarians", 0);
+		}
+	};
+>>>>>>> branch 'master' of https://github.com/robertstepp/jubilant-octo-waddle.git
 
 	public static void fillReciprocol() {
 		Stack<String> reversal = new Stack<String>();
@@ -57,7 +84,12 @@ public class MEvsVE {
 				testCases.add("M" + i + "V" + j);
 			}
 		}
+<<<<<<< HEAD
 		fillReciprocol();
+=======
+		findDisparity();
+		
+>>>>>>> branch 'master' of https://github.com/robertstepp/jubilant-octo-waddle.git
 	}
 
 	public static void removeDisparities() {
@@ -148,10 +180,28 @@ public class MEvsVE {
 	public static void outputToConsole(String message) {
 		System.out.println(message);
 	}
+	
+	public static void findDisparity() {
+		fillReciprocol();
+		for (int i = 0; i < testCases.size(); i++) {
+			parseTestCases(testCases.get(i));
+			if (tempForTest.get("V") > 0 && tempForTest.get("M") > tempForTest.get("V")) {
+				invalidCases.add(testCases.get(i));
+				invalidCases.add("M" + (max - tempForTest.get("M")) + "V" + (max - tempForTest.get("V")));
+			}
+		}
+		for (int j = 0; j < invalidCases.size(); j++) {
+			int remove = testCases.indexOf(invalidCases.get(j));
+			int removeReciprocol = testCases.indexOf(invalidCases.get(j));
+			testCases.remove(remove);
+			testCasesReciprocol.remove(removeReciprocol);
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
 		openFile();
 		int input = Integer.parseInt(JOptionPane.showInputDialog(null, "How many of each to make?\nVegetarians\\MeatEaters\n(They will be even)", 3));
+		max = input;
 		buildTestCases(input);
 		startTree(input);
 		closeFile();
