@@ -12,6 +12,12 @@ public class MEvsVEv2 {
 	static TreeNode<String> root = new TreeNode<String>();
 	static char direction = 'd';
 
+	/**
+	 * Build the test cases which will allow it to make a tree.
+	 * 
+	 * @param total
+	 *            Number of each type to generate (defaults to 3)
+	 */
 	public static void buildTestCases(int total) {
 		for (int i = 0; i <= total; i++) {
 			for (int j = total; j >= 0; j--) {
@@ -21,6 +27,10 @@ public class MEvsVEv2 {
 		removeDisparities();
 	}
 
+	/**
+	 * Remove any values from the testCases that will cause there to be more Meat
+	 * Eaters than Vegetarians.
+	 */
 	public static void removeDisparities() {
 		for (int i = testCases.size() - 1; i > 0; i--) {
 			parseTestCases(testCases.get(i));
@@ -31,12 +41,25 @@ public class MEvsVEv2 {
 		}
 	}
 
+	/**
+	 * Puts the testCase into a HashMap for various functions. Allow math to be
+	 * performed on the value of each.
+	 * 
+	 * @param testCase
+	 *            Case to be parsed.
+	 */
 	public static void parseTestCases(String testCase) {
 		String[] temp = testCase.split("");
 		tempForTest.put(temp[0], Integer.parseInt(temp[1]));
 		tempForTest.put(temp[2], Integer.parseInt(temp[3]));
 	}
 
+	/**
+	 * Builds the tree to search.
+	 * 
+	 * @param parent
+	 *            The TreeNode that it is working on.
+	 */
 	public static void buildTree(TreeNode<String> parent) {
 		String[] temp = ((String) parent.data).split("");
 		hashParent.put(temp[0], Integer.parseInt(temp[1]));
@@ -48,7 +71,7 @@ public class MEvsVEv2 {
 				parseTestCases(testCases.get(i));
 				int testCaseTotal = tempForTest.get("M") + tempForTest.get("V");
 				int difference = testCaseTotal - parentTotal;
-				if (direction == 'd') {
+				if (direction == 'd') { // This is to move them from the start to the finish.
 					if (difference == -2) {
 						TreeNode<String> child = parent.addChild(testCases.get(i));
 						direction = 'u';
@@ -56,14 +79,13 @@ public class MEvsVEv2 {
 							buildTree(child);
 					}
 
-				} else if (direction == 'u') {
-					System.out.println(difference);
+				} else if (direction == 'u') { // This is to move them back to the start.
 					if (difference > 0 && difference < 2) {
 						TreeNode<String> child = parent.addChild(testCases.get(i));
 						direction = 'd';
 						if (!child.data.equals(endCase))
 							System.out.println(parent.data + " " + child.data);
-						// buildTree(child);
+						// buildTree(child); // Where everything breaks down.
 					}
 
 				}
@@ -72,6 +94,14 @@ public class MEvsVEv2 {
 
 	}
 
+	/**
+	 * Outputs the tree from the top down.
+	 * 
+	 * @param <T>
+	 *            Type of data to return.
+	 * @param t
+	 *            The treenode it is working on
+	 */
 	public static <T> void outputTree(TreeNode<T> t) {
 
 		// if (t.getParent() == null)
