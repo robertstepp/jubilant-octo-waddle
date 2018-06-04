@@ -45,7 +45,8 @@ public class MEvsVEv2 {
 				testCases.add("M" + i + "V" + j);
 			}
 		}
-		removeDisparities();
+		// System.out.println(testCases);
+		// removeDisparities();
 	}
 
 	/**
@@ -55,11 +56,13 @@ public class MEvsVEv2 {
 	public static void removeDisparities() {
 		for (int i = testCases.size() - 1; i > 0; i--) {
 			parseTestCases(testCases.get(i));
-			if (tempForTest.get("M") > tempForTest.get("V")) {
+			if (tempForTest.get("V") != 0 && tempForTest.get("M") > tempForTest.get("V")) {
 				int position = testCases.indexOf(testCases.get(i));
 				testCases.remove(position);
 			}
 		}
+
+		// System.out.println(testCases);
 	}
 
 	/**
@@ -86,7 +89,6 @@ public class MEvsVEv2 {
 		hashParent.put(temp[0], Integer.parseInt(temp[1]));
 		hashParent.put(temp[2], Integer.parseInt(temp[3]));
 		int parentTotal = hashParent.get("M") + hashParent.get("V");
-
 		for (int i = 0; i < testCases.size(); i++) {
 			if (!testCases.get(i).equals(parent.data)) {
 				parseTestCases(testCases.get(i));
@@ -101,12 +103,13 @@ public class MEvsVEv2 {
 					}
 
 				} else if (direction == 'u') { // This is to move them back to the start.
-					if (difference > 0 && difference < 2) {
+					if (difference == 1 || difference == 2) {
 						TreeNode<String> child = parent.addChild(testCases.get(i));
 						direction = 'd';
-						if (!child.data.equals(endCase))
+						if (!child.data.equals(endCase)) {
 							System.out.println(parent.data + " " + child.data);
-						// buildTree(child); // Where everything breaks down.
+							// buildTree(child); // Where everything breaks down.
+						}
 					}
 
 				}
